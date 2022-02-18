@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <robot name="walker">
+
+    <link name="hip_lf">
+       <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.033238"/>
+        <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+      </inertial>
+      <visual name="hip_lf1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_lf_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="midleg_lf">
+      <inertial>
+        <origin xyz="0 -.0395 0" rpy="0 0 0"/>
+        <mass value="0.108"/>
+        <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+      </inertial>
+      <visual name="midleg_lf1">
+        <origin xyz="0 -.0395 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lf_c">
+        <origin xyz="0 -.0395 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="left_front_hip_joint" type="revolute">
+      <origin xyz="0.02 -.02 0" rpy="0 0 0"/>
+      <parent link="hip_lf"/>
+      <child link="midleg_lf"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <!-- <link name="foot_lf">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.056267"/>
+        <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+      </inertial>
+      <visual name="foot_lf1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="foot_lf_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision>
+    </link> -->
+
+  </robot>
