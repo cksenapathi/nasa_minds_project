@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <robot name="walker">
 
-    <link name="hip_lf">
+    <link name="hip_bracket_lf">
+       <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.033238"/>
+        <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+      </inertial>
+      <visual name="hip_bracket_lf1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_bracket.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_bracket_lf_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_bracket.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+     <link name="hip_lf">
        <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <mass value="0.033238"/>
@@ -29,22 +57,26 @@
       </collision>
     </link>
 
-
-          <!--  TODO : Knee joint 2 is in picture -->
     <link name="hip_lf_servo">
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz=".01 0 -.025" rpy="0 0 0"/>
         <mass value="0.052637"/>
         <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
       </inertial>
       <visual name="hip_lf_servo">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz=".01 0 -.025" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
         </geometry>
+        <material name="test_color"> <!-- LED material -->
+  <ambient>0 0 0 1</ambient>
+  <diffuse>0 0 0 1</diffuse>
+  <specular>0 0 0 0</specular>
+  <emissive>0 1 0 1</emissive>
+</material> <!-- End LED material -->
       </visual>
       <collision name="hip_lf_servo_c">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz=".01 0 -.025" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
         </geometry>
@@ -62,11 +94,28 @@
     <joint name="left_front_hip_servo_joint" type="fixed">
       <child link="hip_lf"/>
       <parent link="hip_lf_servo"/>
-      <origin xyz=".003824 -.012984 -.011851" rpy="0 0 0"/>
+      <origin xyz=".013832 -.012655 -.033984" rpy="0 0 0"/>
     </joint>
 
+    <joint name="lf_servo1" type="revolute">
+      <parent link="hip_bracket_lf"/>
+      <child link="hip_lf_servo"/>
+      <origin xyz="0.002347 -0.020442 0.026" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
 
-    <link name="midleg_lf_servo1">
+    <transmission name="lf1_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lf_servo1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+     <link name="midleg_lf_servo1">
       <inertial>
         <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
         <mass value="0.052637"/>
@@ -172,7 +221,7 @@
           </friction>
         </surface>
       </collision>
-    </link> -->
+    </link>
 
     <joint name="lfk2_fixed_joint" type="fixed">
       <parent link="midleg_lf"/>
@@ -231,20 +280,8 @@
         <robotNamespace></robotNamespace>
       </plugin>
     </gazebo>
-<!--
-
- -->
 
 
 
-    <!-- <joint name="left_front_hip_joint" type="revolute">
-      <origin xyz="0.02 -.022 .003" rpy="0 0 0"/>
-      <parent link="hip_lf"/>
-      <child link="midleg_lf"/>
-      <axis xyz="1 0 0"/>
-      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
-    </joint>
-
- -->
 
   </robot>

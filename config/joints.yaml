@@ -3,5 +3,6 @@ walker:
     type: "position_controllers/JointGroupPositionController"
     publish_rate: 50
     joints:
+      - lf_servo1
       - lf_servo2
       - lf_servo3
