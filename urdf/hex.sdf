@@ -68,12 +68,6 @@
         <geometry>
           <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
         </geometry>
-        <material name="test_color"> <!-- LED material -->
-  <ambient>0 0 0 1</ambient>
-  <diffuse>0 0 0 1</diffuse>
-  <specular>0 0 0 0</specular>
-  <emissive>0 1 0 1</emissive>
-</material> <!-- End LED material -->
       </visual>
       <collision name="hip_lf_servo_c">
         <origin xyz=".01 0 -.025" rpy="0 0 0"/>

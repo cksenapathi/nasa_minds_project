@@ -10,7 +10,7 @@ This repo contains the software and the models for the autonomous hexapod that w
 
 ## TODO
 - Add body stl to model once inertia is calculated
-- Simulate moon surface using https://github.com/MobileRobots/amr-ros-config
+- ~~Simulate moon surface using https://github.com/MobileRobots/amr-ros-config ~~
 - Add camera plugin to model to simulate cameras
 - Write software which stitches pairs of cameras to get depth information
 - Stitching stereo images for panoramic depth information
@@ -20,3 +20,10 @@ This repo contains the software and the models for the autonomous hexapod that w
   - Pull nodelet from rtabmap
   - Implement ICP algorithm to build a point cloud map in global inertial frame
 - Path planning algorithm which takes current map with graph of all previously visited locations and outputs a new location in inertial frame to maximize information gain
+
+## How to Run
+1. Clone repo to path/to/catkin/ws/src/
+2. cd path/to/catkin/ws
+3. `source devel/setup.bash`
+4. `roslaunch hex_walker empty_gazebo.launch gui_controller:=true` will open up the left left leg with sliders for the leg servos
+5. `roslaunch hex_walker moon_gazebo.launch gui_controller:=true` will open up the left left leg with sliders for the leg servos in the moon environment with topology
