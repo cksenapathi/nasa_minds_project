@@ -12,3 +12,12 @@ walker:
       - lb_servo1
       - lb_servo2
       - lb_servo3
+      - rf_servo1
+      - rf_servo2
+      - rf_servo3
+      - rm_servo1
+      - rm_servo2
+      - rm_servo3
+      - rb_servo1
+      - rb_servo2
+      - rb_servo3
