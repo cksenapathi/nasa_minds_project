@@ -6,3 +6,9 @@ walker:
       - lf_servo1
       - lf_servo2
       - lf_servo3
+      - lm_servo1
+      - lm_servo2
+      - lm_servo3
+      - lb_servo1
+      - lb_servo2
+      - lb_servo3
