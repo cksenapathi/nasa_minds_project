@@ -1,22 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <robot name="walker">
 
+    <!-- battery stats
+    mass: 210 g
+    size: 10.6 x 3.5 x 2.7 cm -->
+
+    <link name="cam_ml"/>
+    <joint name="cam_ml_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz=".053295 -.23099 .11692" rpy="0 0 -1.570796"/>
+      <parent link="body"/>
+      <child link="cam_ml"/>
+    </joint>
+
+    <link name="cam_mr"/>
+    <joint name="cam_mr_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz="-.053295 -.23099 .11692" rpy="0 0 -1.570796"/>
+      <parent link="body"/>
+      <child link="cam_mr"/>
+    </joint>
+
+    <link name="cam_ll"/>
+    <joint name="cam_ll_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz=".14708 -.18276 .16884" rpy="0 0 -1.0995572"/>
+      <parent link="body"/>
+      <child link="cam_ll"/>
+    </joint>
+
+    <link name="cam_lr"/>
+    <joint name="cam_lr_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz=".051525 -.23224 .16884" rpy="0 0 -1.0995572"/>
+      <parent link="body"/>
+      <child link="cam_lr"/>
+    </joint>
+
+    <link name="cam_rl"/>
+    <joint name="cam_rl_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz="-.053883 -.23098 .16884" rpy="0 0 -2.05076144"/>
+      <parent link="body"/>
+      <child link="cam_rl"/>
+    </joint>
+
+    <link name="cam_rr"/>
+    <joint name="cam_rr_joint" type="fixed">
+      <axis xyz="1 1 0" />
+      <origin xyz="-.14717 -.18212 .16942" rpy="0 0 -2.05076144"/>
+      <parent link="body"/>
+      <child link="cam_rr"/>
+    </joint>
+
+    <gazebo reference="cam_ml">
+      <sensor type="camera" name="cam_ml">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/mid/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_mr">
+      <sensor type="camera" name="cam_mr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/mid/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_ll">
+      <sensor type="camera" name="cam_ll">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/left/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_lr">
+      <sensor type="camera" name="cam_lr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/left/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_rl">
+      <sensor type="camera" name="cam_ml">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/right/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_rr">
+      <sensor type="camera" name="cam_mr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/right/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
     <link name="body">
        <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="2.7"/>
-        <inertia ixx="0.6349" ixy="-0.000038467" ixz="-0.000000212" iyy="0.175" iyz="-0.000011698" izz="0.7671"/>
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
+        <mass value="2.8"/>
+        <inertia ixx="0.1026" ixy="0.000098683" ixz="-0.00003882" iyy="0.03332" iyz="0.01001" izz="0.1173"/>
       </inertial>
       <visual name="body1">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://hex_walker/mesh/body.stl" scale="1.0 1.0 1.0"/>
+          <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
         </geometry>
       </visual>
       <collision name="body_c">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://hex_walker/mesh/body.stl" scale="1.0 1.0 1.0"/>
+          <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
         </geometry>
         <surface>
           <friction>
