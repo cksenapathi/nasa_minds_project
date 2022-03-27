@@ -5,49 +5,61 @@
     mass: 210 g
     size: 10.6 x 3.5 x 2.7 cm -->
 
-    <link name="cam_ml"/>
+    <link name="cam_ml">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </link>
     <joint name="cam_ml_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz=".053295 -.23099 .11692" rpy="0 0 -1.570796"/>
       <parent link="body"/>
       <child link="cam_ml"/>
     </joint>
 
-    <link name="cam_mr"/>
+    <link name="cam_mr">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </link>
     <joint name="cam_mr_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz="-.053295 -.23099 .11692" rpy="0 0 -1.570796"/>
       <parent link="body"/>
       <child link="cam_mr"/>
     </joint>
 
     <link name="cam_ll"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
     <joint name="cam_ll_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz=".14708 -.18276 .16884" rpy="0 0 -1.0995572"/>
       <parent link="body"/>
       <child link="cam_ll"/>
     </joint>
 
     <link name="cam_lr"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
     <joint name="cam_lr_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz=".051525 -.23224 .16884" rpy="0 0 -1.0995572"/>
       <parent link="body"/>
       <child link="cam_lr"/>
     </joint>
 
     <link name="cam_rl"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
     <joint name="cam_rl_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz="-.053883 -.23098 .16884" rpy="0 0 -2.05076144"/>
       <parent link="body"/>
       <child link="cam_rl"/>
     </joint>
 
     <link name="cam_rr"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
     <joint name="cam_rr_joint" type="fixed">
-      <axis xyz="1 1 0" />
+      <axis xyz="0 0 1" />
       <origin xyz="-.14717 -.18212 .16942" rpy="0 0 -2.05076144"/>
       <parent link="body"/>
       <child link="cam_rr"/>

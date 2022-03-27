@@ -16,6 +16,10 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
+    <!-- <remap from="walker/mid/left/image_raw" to="mid/left/image_raw"/>
+    <remap from="walker/mid/right/image_raw" to="mid/right/image_raw"/>
+    <remap from="walker/mid/left/camera_info" to="mid/left/camera_info"/>
+    <remap from="walker/mid/right/camera_info" to="mid/right/camera_info"/> -->
   </include>
 
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
@@ -44,5 +48,9 @@
 
   <node name="hex_controller_spawner" pkg="controller_manager"
     type="spawner" args="walker/joints_controller"/>
+
+  <node ns="walker/mid" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+
+  <!-- <node name="rtab" pkg="rtabmap_ros" type="rtabmap"/> -->
 
 </launch>
