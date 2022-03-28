@@ -30,6 +30,7 @@ public:
     for(int i = 0; i < 3; i++){
       v.n[i] = m[i][3];
     }
+    return v;
   }
 
   vec3d operator*(vec3d v){
@@ -64,6 +65,7 @@ public:
     r.m[0][3] = 0;
     r.m[1][3] = 0;
     r.m[2][3] = 0;
+    return r;
   }
 
   Mat4x4 coordInverse(){
@@ -83,16 +85,14 @@ public:
 
   void rotateAboutOrigin(vec3d, float);
 
-  void print(int precision = 2){
+  void print(){
     for(int i = 0; i < 3; i++){
-        Serial.print(" { ");
+        printf(" { ");
         for(int j = 0; j < 4; j++){
-          Serial.print(m[i][j], precision);
-          Serial.print(' ');
+          printf("%f ", m[i][j]);
         }
-        Serial.println("} ");
+        printf("} \n\n");
     }
-    Serial.println();
   }
 
 

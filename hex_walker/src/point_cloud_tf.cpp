@@ -38,8 +38,8 @@ void mid_cb(const sensor_msgs::PointCloud2ConstPtr& msg)
   sensor_msgs::PointCloud2 tf_pc;
   tf::TransformListener mtb_listener;
   try{
-    mtb_listener.waitForTransform("body", "cam_ml", ros::Time(0), ros::Duration(10));
-    mtb_listener.lookupTransform("body", "cam_ml", ros::Time(0), mid_to_body);
+    mtb_listener.waitForTransform("body", "cam_ll", ros::Time(0), ros::Duration(10));
+    mtb_listener.lookupTransform("body", "cam_ll", ros::Time(0), mid_to_body);
   }
   catch(tf::TransformException &ex){
     ROS_ERROR("%s",ex.what());
@@ -81,8 +81,8 @@ void right_cb(const sensor_msgs::PointCloud2ConstPtr& msg)
   tf::StampedTransform right_to_body;
   tf::TransformListener rtb_listener;
   try{
-    rtb_listener.waitForTransform("body", "cam_rl", ros::Time(0), ros::Duration(10));
-    rtb_listener.lookupTransform("body", "cam_rl", ros::Time(0), right_to_body);
+    rtb_listener.waitForTransform("body", "cam_ll", ros::Time(0), ros::Duration(10));
+    rtb_listener.lookupTransform("body", "cam_ll", ros::Time(0), right_to_body);
   }
   catch(tf::TransformException &ex){
     ROS_ERROR("%s",ex.what());
@@ -122,6 +122,7 @@ int main(int argc, char** argv)
     transform.setOrigin(tf::Vector3(0, 0, 0.0));
     tf::Quaternion q;
     q.setRPY(0, 1.570796, -3.141592);
+    transform.setRotation(q);
     pcl_ros::transformPointCloud("body", transform, full_pc2, full_pc2);
     pc_pub.publish(full_pc2);
     full_pc2.height = 0;

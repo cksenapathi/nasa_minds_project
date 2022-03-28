@@ -1,9 +1,9 @@
 #ifndef LEG
 #define LEG
 
-#include "vec3d.h"
-#include "Mat4x4.h"
-#include "Quaternion.h"
+#include "hex_control/vec3d.h"
+#include "hex_control/Mat4x4.h"
+#include "hex_control/Quaternion.h"
 
 class Leg {
 private:
@@ -62,7 +62,7 @@ public:
   vec3d setServos(vec3d a){
 
     a += servoOffsets;
-    for(byte i = 0; i < 3; i++)
+    for(int i = 0; i < 3; i++)
       if(servoIsReversed[i])
         a.n[i] = 180 - a.n[i];
     a += servoTrim;

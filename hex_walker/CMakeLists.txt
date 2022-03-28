@@ -192,6 +192,9 @@ install(FILES
   launch/moon_gazebo.launch
   launch/moon.launch
   launch/empty_gazebo.launch
+  launch/robot.launch
+  launch/multi_robot.launch
+  launch/single_moon.launch
   # myfile2
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

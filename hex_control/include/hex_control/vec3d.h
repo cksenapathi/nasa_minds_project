@@ -1,7 +1,9 @@
 #ifndef VEC3D
 #define VEC3D
 
-#include <Arduino.h>
+#include <string>
+#include <cmath>
+#define PI 3.14159265
 
 class vec3d {
 public:
@@ -87,6 +89,10 @@ public:
     return false;
   }
 
+  float dot(vec3d &v){
+    return (x * v.x) + (y * v.y) + (z * v.z);
+  }
+
   float angleBetween(vec3d &v, bool rads = false){
     float mags = mag() * v.mag();
     if(mags != 0){
@@ -95,31 +101,26 @@ public:
     return 0;
   }
 
-  float dot(vec3d &v){
-    return (x * v.x) + (y * v.y) + (z * v.z);
-  }
-
   vec3d cross(vec3d &v){
     return vec3d(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
   }
 
-  String output(int decimal = 4){
-    return "{ " + String(x, decimal) + ", " + String(y, decimal) + ", " + String(z, decimal) + " }";
+  std::string output(int decimal = 4){
+    return "{ " + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + " }\n\n";
   }
 
   void print(int decimal = 2){
-    Serial.print(" { ");
-    Serial.print(x, decimal);
-    Serial.print(", ");
-    Serial.print(y, decimal);
-    Serial.print(", ");
-    Serial.print(z, decimal);
-    Serial.print(" } ");
+    printf(" { ");
+    printf("%f", x);
+    printf(", ");
+    printf("%f", y);
+    printf(", ");
+    printf("%f", z);
+    printf (" } \n\n");
   }
 
   void println(int decimal = 2){
-    print(decimal);
-    Serial.println();
+    printf("%d\n", decimal);
   }
 
   float mag(){
@@ -140,6 +141,7 @@ public:
     x = u.x;
     y = u.y;
     z = u.z;
+    return *this;
   }
 
   void bound(float a, float b, float c){

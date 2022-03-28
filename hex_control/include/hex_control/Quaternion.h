@@ -1,8 +1,8 @@
 #ifndef QUATERNION
 #define QUATERNION
 
-#include "vec3d.h"
-#include "Mat4x4.h"
+#include "hex_control/vec3d.h"
+#include "hex_control/Mat4x4.h"
 
 class Quaternion {
 public:
@@ -131,21 +131,12 @@ public:
     return R;
   }
 
-  void print(int decimal = 2){
-    Serial.print(" { ");
-    Serial.print(a, decimal);
-    Serial.print(", ");
-    Serial.print(b, decimal);
-    Serial.print(", ");
-    Serial.print(c, decimal);
-    Serial.print(", ");
-    Serial.print(d, decimal);
-    Serial.print(" } ");
+  void print(){
+    printf("{%f, %f, %f, %f}\n\n", a, b, c, d);
   }
 
   void println(int decimal = 2){
-    print(decimal);
-    Serial.println();
+    printf("%d\n", decimal);
   }
 
 };
