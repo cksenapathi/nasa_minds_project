@@ -1,0 +1,40 @@
+<launch>
+  <arg name="model" default="$(find hex_walker)/urdf/hex.sdf"/>
+  <arg name="gui_controller"/>
+
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <include file="$(find hex_walker)/launch/robot.launch" >
+      <arg name="init_pose" value="-x 0 -y 0 -z 0" />
+      <arg name="robot_name"  value="Robot1" />
+      <arg name="gui_controller" value="$(arg gui_controller)"/>
+    </include>
+  </group>
+
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <include file="$(find hex_walker)/launch/robot.launch" >
+      <arg name="init_pose" value="-x 1 -y 1 -z 0" />
+      <arg name="robot_name"  value="Robot2" />
+      <arg name="gui_controller" value="$(arg gui_controller)"/>
+    </include>
+  </group>
+
+  <group ns="robot3">
+    <param name="tf_prefix" value="robot3_tf" />
+    <include file="$(find hex_walker)/launch/robot.launch" >
+      <arg name="init_pose" value="-x 0 -y 1 -z 0" />
+      <arg name="robot_name"  value="Robot3" />
+      <arg name="gui_controller" value="$(arg gui_controller)"/>
+    </include>
+  </group>
+
+  <group ns="robot4">
+    <param name="tf_prefix" value="robot4_tf" />
+    <include file="$(find hex_walker)/launch/robot.launch" >
+      <arg name="init_pose" value="-x 1 -y 0 -z 0" />
+      <arg name="robot_name"  value="Robot4" />
+      <arg name="gui_controller" value="$(arg gui_controller)"/>
+    </include>
+  </group>
+</launch>

@@ -1,0 +1,38 @@
+<launch>
+  <arg name="robot_name"/>
+  <arg name="init_pose"/>
+  <arg name="gui_controller"/>
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+        args="$(arg init_pose) -unpause -urdf -model $(arg robot_name) -param /robot_description"
+        respawn="false" output="screen"/>
+
+  <node if="$(arg gui_controller)" pkg="hex_walker" name="joint_transfer_node" type="joints_pub.py"/> -->
+
+  <node if="$(arg gui_controller)" name="joint_state_publisher"
+        pkg="joint_state_publisher_gui"
+        type="joint_state_publisher_gui" />
+
+  <node unless="$(arg gui_controller)" pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher"
+        name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+
+  <rosparam command="load" file="$(find hex_walker)/config/joints.yaml"/>
+
+  <node name="hex_controller_spawner" pkg="controller_manager"
+    type="spawner" args="walker/joints_controller"/>
+
+  <node ns="walker/mid" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+  <node ns="walker/left" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+  <node ns="walker/right" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+
+  <node name="mapping" pkg="rtabmap_ros" type="rtabmap">
+    <param name="subscribe_depth" type="bool" value="false"/>
+    <param name="subscribe_scan_cloud" type="bool" value="true"/>
+    <param name="frame_id" type="string" value="base"/>
+  </node>
+
+</launch>
