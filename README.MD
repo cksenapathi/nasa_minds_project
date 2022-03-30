@@ -9,11 +9,11 @@ Our team chose to focus on the field of autonomous robotics and how they can aug
 This repo contains the software and the models for the autonomous hexapod that was designed by the team, and will grow towards our goal of creating a decentralized swarm of autonomous robots which are able to collaboratively map out a given area.
 
 ## TODO
-- Add body stl to model once inertia is calculated
+- ~~Add body stl to model once inertia is calculated~~
 - ~~Simulate moon surface using https://github.com/MobileRobots/amr-ros-config ~~
-- Add camera plugin to model to simulate cameras
-- Write software which stitches pairs of cameras to get depth information
-- Stitching stereo images for panoramic depth information
+- ~~Add camera plugin to model to simulate cameras~~
+- ~~Write software which stitches pairs of cameras to get depth information~~
+- ~~Stitching stereo images for panoramic depth information~~
 - Adding IMU plugin
 - Integrating data sources into http://wiki.ros.org/rtabmap_ros
 - Write software to stitch multiple point cloud pieces together; 2 options
@@ -25,5 +25,7 @@ This repo contains the software and the models for the autonomous hexapod that w
 1. Clone repo to path/to/catkin/ws/src/
 2. cd path/to/catkin/ws
 3. `source devel/setup.bash`
-4. `roslaunch hex_walker empty_gazebo.launch gui_controller:=true` will open up the left left leg with sliders for the leg servos
-5. `roslaunch hex_walker moon_gazebo.launch gui_controller:=true` will open up the left left leg with sliders for the leg servos in the moon environment with topology
+4. `roslaunch hex_walker empty_gazebo.launch gui_controller:=true` will open up the full robot with sliders for the leg servos
+5. `roslaunch hex_walker moon_gazebo.launch gui_controller:=true` will open up the full robot with sliders for the leg servos in the moon environment with topology
+6. In a new terminal, `rosrun image_view stereo_view stereo:=walker/mid image:=image_rect_color` will open the middle pair of simulated cameras and the respective disparity image
+7. Point Clouds can be visualized using rviz
