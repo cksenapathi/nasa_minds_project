@@ -1,18 +1,863 @@
-<!-- Left Mid Leg -->
+<?xml version="1.0" encoding="UTF-8"?>
+  <robot name="walker">
 
-<link name="hip_lm_servo">
+    <!-- battery stats
+    mass: 210 g
+    size: 10.6 x 3.5 x 2.7 cm -->
+
+    <link name="cam_ml">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </link>
+    <joint name="cam_ml_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz=".053295 -.23099 .11692" rpy="0 0 -1.570796"/>
+      <parent link="body"/>
+      <child link="cam_ml"/>
+    </joint>
+
+    <link name="cam_mr">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </link>
+    <joint name="cam_mr_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz="-.053295 -.23099 .11692" rpy="0 0 -1.570796"/>
+      <parent link="body"/>
+      <child link="cam_mr"/>
+    </joint>
+
+    <link name="cam_ll"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
+    <joint name="cam_ll_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz=".14708 -.18276 .16884" rpy="0 0 -1.0995572"/>
+      <parent link="body"/>
+      <child link="cam_ll"/>
+    </joint>
+
+    <link name="cam_lr"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
+    <joint name="cam_lr_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz=".051525 -.23224 .16884" rpy="0 0 -1.0995572"/>
+      <parent link="body"/>
+      <child link="cam_lr"/>
+    </joint>
+
+    <link name="cam_rl"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
+    <joint name="cam_rl_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz="-.053883 -.23098 .16884" rpy="0 0 -2.05076144"/>
+      <parent link="body"/>
+      <child link="cam_rl"/>
+    </joint>
+
+    <link name="cam_rr"/>
+      <!-- <origin xyz="0 0 0" rpy="0 1.570796 0"/>
+    <link/> -->
+    <joint name="cam_rr_joint" type="fixed">
+      <axis xyz="0 0 1" />
+      <origin xyz="-.14717 -.18212 .16942" rpy="0 0 -2.05076144"/>
+      <parent link="body"/>
+      <child link="cam_rr"/>
+    </joint>
+
+    <gazebo reference="cam_ml">
+      <sensor type="ray" name="cam_ml">
+        <update_rate>30.0</update_rate>
+        <visualize>true</visualize>
+        <!-- <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+             Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1].
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera> -->
+        <ray>
+           <scan>
+              <horizontal>
+                 <samples>10</samples>
+                 <resolution>1</resolution>
+                 <min_angle>-0.14835</min_angle>
+                 <max_angle>0.14835</max_angle>
+              </horizontal>
+              <vertical>
+                 <samples>10</samples>
+                 <resolution>1</resolution>
+                 <min_angle>-0.14835</min_angle>
+                 <max_angle>0.14835</max_angle>
+              </vertical>
+           </scan>
+           <range>
+              <min>0.01</min>
+              <max>2</max>
+              <resolution>0.02</resolution>
+           </range>
+        </ray>
+        <plugin name="camera_controller" filename="libgazebo_ros_range.so">
+          <!-- <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/mid/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2> -->
+          <gaussianNoise>0.005</gaussianNoise>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>50</updateRate>
+          <topicName>sensor/ir_front</topicName>
+          <frameName>base_ir_front</frameName>
+          <radiation>INFRARED</radiation>
+          <fov>0.2967</fov>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_mr">
+      <sensor type="camera" name="cam_mr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/mid/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_ll">
+      <sensor type="camera" name="cam_ll">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/left/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_lr">
+      <sensor type="camera" name="cam_lr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/left/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_rl">
+      <sensor type="camera" name="cam_ml">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/right/left</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="cam_rr">
+      <sensor type="camera" name="cam_mr">
+        <update_rate>30.0</update_rate>
+        <camera name="head">
+          <diagonal_fov>.9599311</diagonal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>walker/right/right</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>cam_ml</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <link name="body">
+       <inertial>
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
+        <mass value="2.8"/>
+        <inertia ixx="0.1026" ixy="0.000098683" ixz="-0.00003882" iyy="0.03332" iyz="0.01001" izz="0.1173"/>
+      </inertial>
+      <visual name="body1">
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="body_c">
+        <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <!-- Left Front Leg -->
+    <link name="hip_lf_servo">
+      <inertial>
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="hip_lf_servo">
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_lf_servo_c">
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lf_servo1" type="revolute">
+      <parent link="body"/>
+      <child link="hip_lf_servo"/>
+      <origin xyz=".13938 -0.27853 0.021905" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lf1_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lf_servo1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+     <link name="hip_lf">
+       <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.033238"/>
+        <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+      </inertial>
+      <visual name="hip_lf1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_lf_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="left_front_hip_servo_joint" type="fixed">
+      <child link="hip_lf"/>
+      <parent link="hip_lf_servo"/>
+      <origin xyz=".012472 .013122 -.030332" rpy="0 0 1.570796"/>
+    </joint>
+
+     <link name="midleg_lf_servo1">
+      <inertial>
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="midleg_lf_servo1">
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lf_servo1_c">
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lf_servo2" type="revolute">
+      <parent link="hip_lf"/>
+      <child link="midleg_lf_servo1"/>
+      <origin xyz="0.020108 -0.021458 0.00279" rpy="0 0 0"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lf2_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lf_servo2">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <link name="midleg_lf">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.108"/>
+        <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+      </inertial>
+      <visual name="midleg_lf1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lf_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lfk1_fixed_joint" type="fixed">
+      <parent link="midleg_lf_servo1"/>
+      <child link="midleg_lf"/>
+      <origin xyz="-.035711 -.037826 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="midleg_lf_servo2">
+      <inertial>
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="midleg_lf_servo2">
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lf_servo2_c">
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lfk2_fixed_joint" type="fixed">
+      <parent link="midleg_lf"/>
+      <child link="midleg_lf_servo2"/>
+      <origin xyz=".01125 -.028326 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="foot_lf">
+      <inertial>
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <mass value="0.056267"/>
+        <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+      </inertial>
+      <visual name="foot_lf1">
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="foot_lf_c">
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lf_servo3" type="revolute">
+      <origin xyz=".024517 -.009743 .000044" rpy="0 0 0"/>
+      <parent link="midleg_lf_servo2"/>
+      <child link="foot_lf"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lf3_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lf_servo3">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <!-- Left Mid Leg-->
+
+    <link name="hip_lm_servo">
+      <inertial>
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="hip_lm_servo">
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_lm_servo_c">
+        <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lm_servo1" type="revolute">
+      <parent link="body"/>
+      <child link="hip_lm_servo"/>
+      <origin xyz=".13938 0 0.021905" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lm1_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lm_servo1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+     <link name="hip_lm">
+       <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.033238"/>
+        <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+      </inertial>
+      <visual name="hip_lm1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="hip_lm_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="left_mid_hip_servo_joint" type="fixed">
+      <child link="hip_lm"/>
+      <parent link="hip_lm_servo"/>
+      <origin xyz=".012472 .013122 -.030332" rpy="0 0 1.570796"/>
+    </joint>
+
+     <link name="midleg_lm_servo1">
+      <inertial>
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="midleg_lm_servo1">
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lm_servo1_c">
+        <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lm_servo2" type="revolute">
+      <parent link="hip_lm"/>
+      <child link="midleg_lm_servo1"/>
+      <origin xyz="0.020108 -0.021458 0.00279" rpy="0 0 0"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lm2_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lm_servo2">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <link name="midleg_lm">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.108"/>
+        <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+      </inertial>
+      <visual name="midleg_lm1">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lm_c">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lmk1_fixed_joint" type="fixed">
+      <parent link="midleg_lm_servo1"/>
+      <child link="midleg_lm"/>
+      <origin xyz="-.035711 -.037826 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="midleg_lm_servo2">
+      <inertial>
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <mass value="0.052637"/>
+        <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+      </inertial>
+      <visual name="midleg_lm_servo2">
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="midleg_lm_servo2_c">
+        <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lmk2_fixed_joint" type="fixed">
+      <parent link="midleg_lm"/>
+      <child link="midleg_lm_servo2"/>
+      <origin xyz=".01125 -.028326 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="foot_lm">
+      <inertial>
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <mass value="0.056267"/>
+        <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+      </inertial>
+      <visual name="foot_lm1">
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision name="foot_lm_c">
+        <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.85</mu>
+              <mu2>0.85</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="lm_servo3" type="revolute">
+      <origin xyz=".024517 -.009743 .000044" rpy="0 0 0"/>
+      <parent link="midleg_lm_servo2"/>
+      <child link="foot_lm"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+    </joint>
+
+    <transmission name="lm3_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="lbk_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="lm_servo3">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+<!-- Left Back Leg -->
+<link name="hip_lb_servo">
   <inertial>
     <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
     <mass value="0.052637"/>
     <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
   </inertial>
-  <visual name="hip_lm_servo">
+  <visual name="hip_lb_servo">
     <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="hip_lm_servo_c">
+  <collision name="hip_lb_servo_c">
     <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
@@ -28,37 +873,37 @@
   </collision>
 </link>
 
-<joint name="lm_servo1" type="revolute">
+<joint name="lb_servo1" type="revolute">
   <parent link="body"/>
-  <child link="hip_lm_servo"/>
-  <origin xyz=".13938 0 0.021905" rpy="0 0 0"/>
+  <child link="hip_lb_servo"/>
+  <origin xyz=".13938 0.27853 0.021905" rpy="0 0 0"/>
   <axis xyz="0 0 1"/>
   <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
 </joint>
 
-<transmission name="lm1_trans" type="SimpleTransmission">
+<transmission name="lb1_trans" type="SimpleTransmission">
   <type>transmission_interface/SimpleTransmission</type>
   <actuator name="lbk_motor">
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
-  <joint name="lm_servo1">
+  <joint name="lb_servo1">
     <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
   </joint>
 </transmission>
 
- <link name="hip_lm">
+ <link name="hip_lb">
    <inertial>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <mass value="0.033238"/>
     <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
   </inertial>
-  <visual name="hip_lm1">
+  <visual name="hip_lb1">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="hip_lm_c">
+  <collision name="hip_lb_c">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/hip_v1.stl" scale="1.0 1.0 1.0"/>
@@ -74,25 +919,25 @@
   </collision>
 </link>
 
-<joint name="left_mid_hip_servo_joint" type="fixed">
-  <child link="hip_lm"/>
-  <parent link="hip_lm_servo"/>
+<joint name="left_back_hip_servo_joint" type="fixed">
+  <child link="hip_lb"/>
+  <parent link="hip_lb_servo"/>
   <origin xyz=".012472 .013122 -.030332" rpy="0 0 1.570796"/>
 </joint>
 
- <link name="midleg_lm_servo1">
+ <link name="midleg_lb_servo1">
   <inertial>
     <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
     <mass value="0.052637"/>
     <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
   </inertial>
-  <visual name="midleg_lm_servo1">
+  <visual name="midleg_lb_servo1">
     <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="midleg_lm_servo1_c">
+  <collision name="midleg_lb_servo1_c">
     <origin xyz="-.024605 -.01 0" rpy="-1.570796 0 -1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
@@ -108,37 +953,37 @@
   </collision>
 </link>
 
-<joint name="lm_servo2" type="revolute">
-  <parent link="hip_lm"/>
-  <child link="midleg_lm_servo1"/>
-  <origin xyz=".13938 0 0.021905" rpy="0 0 0"/>
+<joint name="lb_servo2" type="revolute">
+  <parent link="hip_lb"/>
+  <child link="midleg_lb_servo1"/>
+  <origin xyz="0.020108 -0.021458 0.00279" rpy="0 0 0"/>
   <axis xyz="1 0 0"/>
   <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
 </joint>
 
-<transmission name="lm2_trans" type="SimpleTransmission">
+<transmission name="lb2_trans" type="SimpleTransmission">
   <type>transmission_interface/SimpleTransmission</type>
   <actuator name="lbk_motor">
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
-  <joint name="lm_servo2">
+  <joint name="lb_servo2">
     <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
   </joint>
 </transmission>
 
-<link name="midleg_lm">
+<link name="midleg_lb">
   <inertial>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <mass value="0.108"/>
     <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
   </inertial>
-  <visual name="midleg_lm1">
+  <visual name="midleg_lb1">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="midleg_lm_c">
+  <collision name="midleg_lb_c">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
@@ -154,25 +999,25 @@
   </collision>
 </link>
 
-<joint name="lmk1_fixed_joint" type="fixed">
-  <parent link="midleg_lm_servo1"/>
-  <child link="midleg_lm"/>
+<joint name="lbk1_fixed_joint" type="fixed">
+  <parent link="midleg_lb_servo1"/>
+  <child link="midleg_lb"/>
   <origin xyz="-.035711 -.037826 0" rpy="0 0 0"/>
 </joint>
 
-<link name="midleg_lm_servo2">
+<link name="midleg_lb_servo2">
   <inertial>
     <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
     <mass value="0.052637"/>
     <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
   </inertial>
-  <visual name="midleg_lm_servo2">
+  <visual name="midleg_lb_servo2">
     <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="midleg_lm_servo2_c">
+  <collision name="midleg_lb_servo2_c">
     <origin xyz="0 0 0" rpy="1.570796 0 1.570796"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
@@ -188,25 +1033,25 @@
   </collision>
 </link>
 
-<joint name="lmk2_fixed_joint" type="fixed">
-  <parent link="midleg_lm"/>
-  <child link="midleg_lm_servo2"/>
+<joint name="lbk2_fixed_joint" type="fixed">
+  <parent link="midleg_lb"/>
+  <child link="midleg_lb_servo2"/>
   <origin xyz=".01125 -.028326 0" rpy="0 0 0"/>
 </joint>
 
-<link name="foot_lm">
+<link name="foot_lb">
   <inertial>
     <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
     <mass value="0.056267"/>
     <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
   </inertial>
-  <visual name="foot_lm1">
+  <visual name="foot_lb1">
     <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
     </geometry>
   </visual>
-  <collision name="foot_lm_c">
+  <collision name="foot_lb_c">
     <origin xyz="-.021362 -.006643 -.04585" rpy="0 0 0"/>
     <geometry>
       <mesh filename="package://hex_walker/mesh/footv1.stl" scale="1.0 1.0 1.0"/>
@@ -222,20 +1067,751 @@
   </collision>
 </link>
 
-<joint name="lm_servo3" type="revolute">
+<joint name="lb_servo3" type="revolute">
   <origin xyz=".024517 -.009743 .000044" rpy="0 0 0"/>
-  <parent link="midleg_lm_servo2"/>
-  <child link="foot_lm"/>
+  <parent link="midleg_lb_servo2"/>
+  <child link="foot_lb"/>
   <axis xyz="1 0 0"/>
   <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
 </joint>
 
-<transmission name="lm3_trans" type="SimpleTransmission">
+<transmission name="lb3_trans" type="SimpleTransmission">
   <type>transmission_interface/SimpleTransmission</type>
   <actuator name="lbk_motor">
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
-  <joint name="lm_servo3">
+  <joint name="lb_servo3">
     <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
   </joint>
 </transmission>
+
+<!-- Right Front Leg -->
+<link name="hip_rf_servo">
+  <inertial>
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="hip_rf_servo">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rf_servo_c">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rf_servo1" type="revolute">
+  <parent link="body"/>
+  <child link="hip_rf_servo"/>
+  <origin xyz="-.13938 -0.27853 0.021905" rpy="0 0 0"/>
+  <axis xyz="0 0 1"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rf1_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rf_servo1">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+ <link name="hip_rf">
+   <inertial>
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <mass value="0.033238"/>
+    <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+  </inertial>
+  <visual name="hip_rf1">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rf_c">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="right_front_hip_servo_joint" type="fixed">
+  <child link="hip_rf"/>
+  <parent link="hip_rf_servo"/>
+  <origin xyz="-.012472 .013122 -.030332" rpy="0 0 1.570796"/>
+</joint>
+
+ <link name="midleg_rf_servo1">
+  <inertial>
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rf_servo1">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rf_servo1_c">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rf_servo2" type="revolute">
+  <parent link="hip_rf"/>
+  <child link="midleg_rf_servo1"/>
+  <origin xyz="0.020108 0.021458 0.00279" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rf2_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rf_servo2">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+<link name="midleg_rf">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.108"/>
+    <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+  </inertial>
+  <visual name="midleg_rf1">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rf_c">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rfk1_fixed_joint" type="fixed">
+  <parent link="midleg_rf_servo1"/>
+  <child link="midleg_rf"/>
+  <origin xyz="-.035711 .037826 0" rpy="0 0 0"/>
+</joint>
+
+<link name="midleg_rf_servo2">
+  <inertial>
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rf_servo2">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rf_servo2_c">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rfk2_fixed_joint" type="fixed">
+  <parent link="midleg_rf"/>
+  <child link="midleg_rf_servo2"/>
+  <origin xyz=".01125 .028326 0" rpy="0 0 0"/>
+</joint>
+
+<link name="foot_rf">
+  <inertial>
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <mass value="0.056267"/>
+    <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+  </inertial>
+  <visual name="foot_rf1">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="foot_rf_c">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rf_servo3" type="revolute">
+  <origin xyz=".024517 .009743 .000044" rpy="0 0 0"/>
+  <parent link="midleg_rf_servo2"/>
+  <child link="foot_rf"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rf3_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rf_servo3">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+<!-- Right Mid Leg -->
+<link name="hip_rm_servo">
+  <inertial>
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="hip_rm_servo">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rm_servo_c">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rm_servo1" type="revolute">
+  <parent link="body"/>
+  <child link="hip_rm_servo"/>
+  <origin xyz="-.13938 0 0.021905" rpy="0 0 0"/>
+  <axis xyz="0 0 1"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rm1_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rm_servo1">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+ <link name="hip_rm">
+   <inertial>
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <mass value="0.033238"/>
+    <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+  </inertial>
+  <visual name="hip_rm1">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rm_c">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="right_mid_hip_servo_joint" type="fixed">
+  <child link="hip_rm"/>
+  <parent link="hip_rm_servo"/>
+  <origin xyz="-.012472 .013122 -.030332" rpy="0 0 1.570796"/>
+</joint>
+
+ <link name="midleg_rm_servo1">
+  <inertial>
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rm_servo1">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rm_servo1_c">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rm_servo2" type="revolute">
+  <parent link="hip_rm"/>
+  <child link="midleg_rm_servo1"/>
+  <origin xyz="0.020108 0.021458 0.00279" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rm2_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rm_servo2">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+<link name="midleg_rm">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.108"/>
+    <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+  </inertial>
+  <visual name="midleg_rm1">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rm_c">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rmk1_fixed_joint" type="fixed">
+  <parent link="midleg_rm_servo1"/>
+  <child link="midleg_rm"/>
+  <origin xyz="-.035711 .037826 0" rpy="0 0 0"/>
+</joint>
+
+<link name="midleg_rm_servo2">
+  <inertial>
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rm_servo2">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rm_servo2_c">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rmk2_fixed_joint" type="fixed">
+  <parent link="midleg_rm"/>
+  <child link="midleg_rm_servo2"/>
+  <origin xyz=".01125 .028326 0" rpy="0 0 0"/>
+</joint>
+
+<link name="foot_rm">
+  <inertial>
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <mass value="0.056267"/>
+    <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+  </inertial>
+  <visual name="foot_rm1">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="foot_rm_c">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rm_servo3" type="revolute">
+  <origin xyz=".024517 .009743 .000044" rpy="0 0 0"/>
+  <parent link="midleg_rm_servo2"/>
+  <child link="foot_rm"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rm3_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rm_servo3">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+<!-- Right Back Leg -->
+<link name="hip_rb_servo">
+  <inertial>
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="hip_rb_servo">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rb_servo_c">
+    <origin xyz="0 .009388 -0.020962" rpy="0 0 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rb_servo1" type="revolute">
+  <parent link="body"/>
+  <child link="hip_rb_servo"/>
+  <origin xyz="-.13938 0.27853 0.021905" rpy="0 0 0"/>
+  <axis xyz="0 0 1"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rb1_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rb_servo1">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+ <link name="hip_rb">
+   <inertial>
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <mass value="0.033238"/>
+    <inertia ixx="0.000012095" ixy="0.000000473" ixz="-0.000000161" iyy="0.000019489" iyz="0.000001093" izz="0.000025287"/>
+  </inertial>
+  <visual name="hip_rb1">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="hip_rb_c">
+    <origin xyz="0 0 0" rpy="0 0 3.141592"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/hip_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="right_back_hip_servo_joint" type="fixed">
+  <child link="hip_rb"/>
+  <parent link="hip_rb_servo"/>
+  <origin xyz="-.012472 .013122 -.030332" rpy="0 0 1.570796"/>
+</joint>
+
+ <link name="midleg_rb_servo1">
+  <inertial>
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rb_servo1">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rb_servo1_c">
+    <origin xyz="-.024605 .01 0" rpy="-1.570796 3.141592 -1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rb_servo2" type="revolute">
+  <parent link="hip_rb"/>
+  <child link="midleg_rb_servo1"/>
+  <origin xyz="0.020108 0.021458 0.00279" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rb2_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rb_servo2">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+<link name="midleg_rb">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.108"/>
+    <inertia ixx="0.0001029" ixy="0.000000127" ixz="-6.3e-11" iyy="0.000013792" iyz="2.07e-10" izz="0.0001075"/>
+  </inertial>
+  <visual name="midleg_rb1">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rb_c">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/midleg_v2.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rbk1_fixed_joint" type="fixed">
+  <parent link="midleg_rb_servo1"/>
+  <child link="midleg_rb"/>
+  <origin xyz="-.035711 .037826 0" rpy="0 0 0"/>
+</joint>
+
+<link name="midleg_rb_servo2">
+  <inertial>
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <mass value="0.052637"/>
+    <inertia ixx="0.000008677" ixy="0" ixz="0.000000097" iyy="0.000014407" iyz="0" izz="0.000009204"/>
+  </inertial>
+  <visual name="midleg_rb_servo2">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="midleg_rb_servo2_c">
+    <origin xyz="0 0 0" rpy="1.570796 3.141592 1.570796"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/servo.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rbk2_fixed_joint" type="fixed">
+  <parent link="midleg_rb"/>
+  <child link="midleg_rb_servo2"/>
+  <origin xyz=".01125 .028326 0" rpy="0 0 0"/>
+</joint>
+
+<link name="foot_rb">
+  <inertial>
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <mass value="0.056267"/>
+    <inertia ixx="0.000054442" ixy="-0.00000087" ixz="-0.00000315" iyy="0.000072163" iyz="-0.00000607" izz="0.000023722"/>
+  </inertial>
+  <visual name="foot_rb1">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+  </visual>
+  <collision name="foot_rb_c">
+    <origin xyz="-.021362 .006643 -.04585" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://hex_walker/mesh/right_footv1.stl" scale="1.0 1.0 1.0"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.85</mu>
+          <mu2>0.85</mu2>
+        </ode>
+      </friction>
+    </surface>
+  </collision>
+</link>
+
+<joint name="rb_servo3" type="revolute">
+  <origin xyz=".024517 .009743 .000044" rpy="0 0 0"/>
+  <parent link="midleg_rb_servo2"/>
+  <child link="foot_rb"/>
+  <axis xyz="1 0 0"/>
+  <limit lower="-1.22173" upper="1.48353" effort="10" velocity="1.5708"/>
+</joint>
+
+<transmission name="rb3_trans" type="SimpleTransmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <actuator name="rbk_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+  <joint name="rb_servo3">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+</transmission>
+
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace></robotNamespace>
+      </plugin>
+    </gazebo>
+
+  </robot>

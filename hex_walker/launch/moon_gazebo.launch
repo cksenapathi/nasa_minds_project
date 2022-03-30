@@ -1,7 +1,7 @@
 <launch>
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="model" default="$(find hex_walker)/urdf/hex.sdf"/>
+  <arg name="model" default="$(find hex_walker)/urdf/hex.urdf"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
