@@ -41,14 +41,58 @@
   <node name="hex_controller_spawner" pkg="controller_manager"
     type="spawner" args="walker/joints_controller"/>
 
-  <node ns="walker/mid" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+  <!-- <node ns="walker/mid" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
   <node ns="walker/left" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
-  <node ns="walker/right" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/>
+  <node ns="walker/right" name="stereo_image_proc" pkg="stereo_image_proc" type="stereo_image_proc"/> -->
 
+  <!-- do odometry based on stereo odometry node from rtab, use stereo sync nodelet  -->
+
+  <group ns="/walker/mid" >
+      <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc"/>
+
+      <node pkg="nodelet" type="nodelet" name="stereo_sync" args="standalone rtabmap_ros/stereo_sync">
+        <remap from="left/image_rect"       to="left/image_rect"/>
+        <remap from="right/image_rect"      to="right/image_rect"/>
+        <remap from="left/camera_info"      to="left/camera_info"/>
+        <remap from="right/camera_info"     to="right/camera_info"/>
+      </node>
+      <!-- Odometry -->
+      <node pkg="rtabmap_ros" type="stereo_odometry" name="stereo_odometry" output="screen">
+          <remap from="rbgd_image"       to="rgbd_image"/>
+
+          <param name="frame_id" type="string" value="base_link"/>
+          <param name="odom_frame_id" type="string" value="odom"/>
+          <param name="subscribe_rgbd"   type="bool" value="true"/>
+          <param name="queue_size"    type="int" value="5"/>
+
+          <param name="Odom/MinInliers" type="string" value="12"/>
+          <param name="Odom/RoiRatios"  type="string" value="0.03 0.03 0.04 0.04"/>
+      </node>
+  </group>
+
+<!--  <group ns="rtabmap">
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="delete_db_on_start">
+       <param name="frame_id" type="string" value="base_link"/>
+       <param name="subscribe_stereo" type="bool" value="true"/>
+       <param name="subscribe_depth"  type="bool" value="false"/>
+       <param name="approx_sync"      type="bool" value="true"/>
+
+       <remap from="left/image_rect"   to="/walker/mid/left/image_rect_color"/>
+       <remap from="right/image_rect"  to="/walker/mid/right/image_rect"/>
+       <remap from="left/camera_info"  to="/walker/mid/left/camera_info"/>
+       <remap from="right/camera_info" to="/walker/mid/right/camera_info"/>
+       <remap from="odom" to="/stereo_camera/odom"/>
+
+       <param name="queue_size" type="int" value="30"/>
+
+       RTAB-Map's parameters
+       <param name="Vis/MinInliers" type="string" value="12"/>
+    </node>
+   </group>
   <node name="mapping" pkg="rtabmap_ros" type="rtabmap">
     <param name="subscribe_depth" type="bool" value="false"/>
     <param name="subscribe_scan_cloud" type="bool" value="true"/>
     <param name="frame_id" type="string" value="base"/>
-  </node>
+  </node> -->
 
 </launch>

@@ -5,13 +5,54 @@
     mass: 210 g
     size: 10.6 x 3.5 x 2.7 cm -->
 
+
+        <link name="imu_link">
+          <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+          </inertial>
+          <visual name="imu">
+            <origin xyz="0 0 0" rpy="0 0 3.14159"/>
+            <geometry>
+              <box size=".05 .05 .05"/>
+            </geometry>
+          </visual>
+        </link>
+
+        <gazebo reference="imu_link">
+        <gravity>true</gravity>
+        <sensor name="imu_sensor" type="imu">
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <visualize>true</visualize>
+          <topic>__default_topic__</topic>
+          <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+            <topicName>trunk_imu</topicName>
+            <bodyName>imu_link</bodyName>
+            <updateRateHZ>20.0</updateRateHZ>
+            <gaussianNoise>0.0</gaussianNoise>
+            <xyzOffset>0 0 0</xyzOffset>
+            <rpyOffset>0 0 0</rpyOffset>
+            <frameName>imu_link</frameName>
+          </plugin>
+          <pose>0 0 0 0 0 0</pose>
+        </sensor>
+      </gazebo>
+
+      <joint name="imu_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+      </joint>
+
     <link name="cam_ml">
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </link>
     <joint name="cam_ml_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz=".053295 -.23099 .11692" rpy="0 0 -1.570796"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_ml"/>
     </joint>
 
@@ -21,7 +62,7 @@
     <joint name="cam_mr_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz="-.053295 -.23099 .11692" rpy="0 0 -1.570796"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_mr"/>
     </joint>
 
@@ -31,7 +72,7 @@
     <joint name="cam_ll_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz=".14708 -.18276 .16884" rpy="0 0 -1.0995572"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_ll"/>
     </joint>
 
@@ -41,7 +82,7 @@
     <joint name="cam_lr_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz=".051525 -.23224 .16884" rpy="0 0 -1.0995572"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_lr"/>
     </joint>
 
@@ -51,7 +92,7 @@
     <joint name="cam_rl_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz="-.053883 -.23098 .16884" rpy="0 0 -2.05076144"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_rl"/>
     </joint>
 
@@ -61,13 +102,14 @@
     <joint name="cam_rr_joint" type="fixed">
       <axis xyz="0 0 1" />
       <origin xyz="-.14717 -.18212 .16942" rpy="0 0 -2.05076144"/>
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="cam_rr"/>
     </joint>
 
     <gazebo reference="cam_ml">
       <sensor type="camera" name="cam_ml">
         <update_rate>30.0</update_rate>
+        <visualize>true</visualize>
         <camera name="head">
           <diagonal_fov>.9599311</diagonal_fov>
           <image>
@@ -81,13 +123,34 @@
           </clip>
           <noise>
             <type>gaussian</type>
-            <!-- Noise is sampled independently per pixel on each frame.
+             <!-- Noise is sampled independently per pixel on each frame.
                  That pixel's noise value is added to each of its color
                  channels, which at that point lie in the range [0,1]. -->
             <mean>0.0</mean>
             <stddev>0.007</stddev>
           </noise>
         </camera>
+        <ray>
+           <scan>
+              <horizontal>
+                 <samples>10</samples>
+                 <resolution>1</resolution>
+                 <min_angle>-0.14835</min_angle>
+                 <max_angle>0.14835</max_angle>
+              </horizontal>
+              <vertical>
+                 <samples>10</samples>
+                 <resolution>1</resolution>
+                 <min_angle>-0.14835</min_angle>
+                 <max_angle>0.14835</max_angle>
+              </vertical>
+           </scan>
+           <range>
+              <min>0.01</min>
+              <max>2</max>
+              <resolution>0.02</resolution>
+           </range>
+        </ray>
         <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
@@ -226,7 +289,7 @@
     </gazebo>
 
     <gazebo reference="cam_rl">
-      <sensor type="camera" name="cam_ml">
+      <sensor type="camera" name="cam_rl">
         <update_rate>30.0</update_rate>
         <camera name="head">
           <diagonal_fov>.9599311</diagonal_fov>
@@ -305,19 +368,19 @@
       </sensor>
     </gazebo>
 
-    <link name="body">
+    <link name="base_link">
        <inertial>
         <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
         <mass value="2.8"/>
         <inertia ixx="0.1026" ixy="0.000098683" ixz="-0.00003882" iyy="0.03332" iyz="0.01001" izz="0.1173"/>
       </inertial>
-      <visual name="body1">
+      <visual name="base_link1">
         <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
         </geometry>
       </visual>
-      <collision name="body_c">
+      <collision name="base_link_c">
         <origin xyz="0 -.060022 .0254" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://hex_walker/mesh/whole_body.stl" scale="1.0 1.0 1.0"/>
@@ -362,7 +425,7 @@
     </link>
 
     <joint name="lf_servo1" type="revolute">
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="hip_lf_servo"/>
       <origin xyz=".13938 -0.27853 0.021905" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
@@ -604,7 +667,7 @@
     </link>
 
     <joint name="lm_servo1" type="revolute">
-      <parent link="body"/>
+      <parent link="base_link"/>
       <child link="hip_lm_servo"/>
       <origin xyz=".13938 0 0.021905" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
@@ -845,7 +908,7 @@
 </link>
 
 <joint name="lb_servo1" type="revolute">
-  <parent link="body"/>
+  <parent link="base_link"/>
   <child link="hip_lb_servo"/>
   <origin xyz=".13938 0.27853 0.021905" rpy="0 0 0"/>
   <axis xyz="0 0 1"/>
@@ -1086,7 +1149,7 @@
 </link>
 
 <joint name="rf_servo1" type="revolute">
-  <parent link="body"/>
+  <parent link="base_link"/>
   <child link="hip_rf_servo"/>
   <origin xyz="-.13938 -0.27853 0.021905" rpy="0 0 0"/>
   <axis xyz="0 0 1"/>
@@ -1327,7 +1390,7 @@
 </link>
 
 <joint name="rm_servo1" type="revolute">
-  <parent link="body"/>
+  <parent link="base_link"/>
   <child link="hip_rm_servo"/>
   <origin xyz="-.13938 0 0.021905" rpy="0 0 0"/>
   <axis xyz="0 0 1"/>
@@ -1568,7 +1631,7 @@
 </link>
 
 <joint name="rb_servo1" type="revolute">
-  <parent link="body"/>
+  <parent link="base_link"/>
   <child link="hip_rb_servo"/>
   <origin xyz="-.13938 0.27853 0.021905" rpy="0 0 0"/>
   <axis xyz="0 0 1"/>
